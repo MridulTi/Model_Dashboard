@@ -55,9 +55,10 @@ def load_model():
         pretrained="vggface2",
         classify=True,
         num_classes=1,
+        device=DEVICE
     )
-    # checkpoint=torch.load("resnetinceptionv1.epoch_32.pth",map_location=torch.device('cpu'))
-    # inceptmodel.load_state_dict(checkpoint['load_state_dict'])
+    checkpoint=torch.load("weights/resnetinceptionv1_epoch_32.pth",map_location=torch.device('cpu'))
+    inceptmodel.load_state_dict(checkpoint['model_state_dict'])
     inceptmodel.to(DEVICE)
     inceptmodel.eval()
 
@@ -208,8 +209,8 @@ def predict_video(data):
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # Perform object detection
             results = model(rgb_frame)
-
             for result in results:
+                detected_objects=[]
                 if result.boxes is not None:
                     for box in result.boxes.numpy():
                         x1, y1, x2, y2 = box.xyxy[0]
@@ -217,13 +218,20 @@ def predict_video(data):
 
                         confidence = box.conf[0]
                         class_id = int(box.cls[0])
-                        label = f"{coco[class_id]}: {confidence:.2f}"
+                        label = f"{coco[class_id]}: {confidence:.2f}, "
                         
                         # Filter results based on a confidence threshold (e.g., 0.5)
                         if confidence > 0.5:
                             # Draw bounding box and label on the frame
                             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                             cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                            
+                            detected_objects.append(label)
+
+
+            socket.emit("progress", {"data": detected_objects})
+
+                            
                     
             print("Confidence Calculated.")
             # socket.emit("progress",{"data":"Confidence Calculated"})
@@ -236,8 +244,8 @@ def predict_video(data):
         cv2.destroyAllWindows()
         socket.emit("progress",{"data":"Object Detection Completed..."})
 
-        annotated_video_url = url_for('mridul.serve_video', filename="annotated_"+data.filename, _external=True)
-        return annotated_video_url
+        # annotated_video_url = url_for('mridul.serve_video', filename="annotated_"+data.filename, _external=True)
+        return ""
 
     else:
         return ApiError("Unsupported file type", HTTP_400_BAD_REQUEST)
@@ -308,7 +316,7 @@ def predict_DeepFake(data):
 
     with torch.no_grad():
         output=torch.sigmoid(model(face).squeeze(0))
-        prediction="real" if output.item() > 0.5 else "fake"
+        prediction="real" if output.item() < 0.5 else "fake"
 
         real_prediction=1-output.item()
         fake_prediction=output.item()

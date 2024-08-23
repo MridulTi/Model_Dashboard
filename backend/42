@@ -1,9 +1,8 @@
 Collecting setuptools
-  Downloading setuptools-72.1.0-py3-none-any.whl.metadata (6.6 kB)
+  Using cached setuptools-73.0.1-py3-none-any.whl.metadata (6.6 kB)
 Collecting wheel
-  Downloading wheel-0.44.0-py3-none-any.whl.metadata (2.3 kB)
-Downloading setuptools-72.1.0-py3-none-any.whl (2.3 MB)
-   ---------------------------------------- 2.3/2.3 MB 657.7 kB/s eta 0:00:00
-Downloading wheel-0.44.0-py3-none-any.whl (67 kB)
+  Using cached wheel-0.44.0-py3-none-any.whl.metadata (2.3 kB)
+Using cached setuptools-73.0.1-py3-none-any.whl (2.3 MB)
+Using cached wheel-0.44.0-py3-none-any.whl (67 kB)
 Installing collected packages: wheel, setuptools
-Successfully installed setuptools-72.1.0 wheel-0.44.0
+Successfully installed setuptools-73.0.1 wheel-0.44.0

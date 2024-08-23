@@ -16,16 +16,19 @@ function Reg_Log() {
         });
       };
 
-    function Register(){
+    function Register(e){
+        e.preventDefault()
         axios.post("api/v1/auth/register",formData)
             .then((res)=>{
-                if (res.status !== 200 && res.status !== 201) {
-                    handleOpenModal('An error occurred: ' + res.statusText);
-                }
+                // if (res.status !== 200 && res.status !== 201) {
+                //     handleOpenModal('An error occurred: ' + res.statusText);
+                // }
                 console.log(res)
+                window.location.reload()
+
             })
             .catch((err)=>{
-                handleOpenModal('An error occurred: ' + err);
+                console.log(err)
             })
     }
     

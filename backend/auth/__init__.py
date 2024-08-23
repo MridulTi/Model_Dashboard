@@ -20,13 +20,14 @@ def all_user():
 
 @auth.route("/register",methods=['POST'])
 def register():
-    data=request.form
+    data=request.get_json()
     first_name=data["firstName"]
     last_name=data["lastName"]
     email=data["email"]
     userName=data["userName"]
     password=data["password"]
 
+    print(first_name,last_name,email,userName,password)
     if not first_name or not last_name or not email:
         return (ApiError("You must include first name , last name and email",HTTP_400_BAD_REQUEST))
     if not validators.email(email):
@@ -37,10 +38,12 @@ def register():
     try:
         db.session.add(new_user)
         db.session.commit()
+        print("Registered")
+        return ApiResponse("User created successfully",HTTP_200_OK,new_user.to_json()) 
     except Exception as e:
-        #
-        return ApiResponse("User created successfully",HTTP_201_CREATED,list(new_user))
-    return redirect("/?login=true")
+        print("error")
+        db.session.rollback()
+        return ApiError("User Registration Not Successfull",HTTP_400_BAD_REQUEST)
 
 @auth.route("/update-user/<int:user_id>",methods=["PATCH"])
 @jwt_required()

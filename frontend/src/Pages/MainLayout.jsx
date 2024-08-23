@@ -20,6 +20,7 @@ function MainLayout() {
         } else {
             setName("DASHBOARD")
         }
+        console.log(Name)
     }, [])
     function Logout() {
         axios.post("api/v1/auth/logout").then(res => {
@@ -40,7 +41,7 @@ function MainLayout() {
                         <h3 class="font-bold text-lg text-center flex flex-col place-items-center text-blue-500">
                             <img class="w-10 lg:w-14"
                                 src="https://upload.wikimedia.org/wikipedia/en/0/01/CDOT_logo.gif" />C-DOT</h3>
-                        <FaHome className={`text-6xl rounded-lg hover:bg-neutral-500 p-3 ${Name === "DASHBAORD" ? "bg-neutral-500" : ""}`} />
+                        <FaHome className={`text-6xl rounded-lg hover:bg-neutral-500 p-3 ${Name === "DASHBOARD" ? "bg-neutral-500" : ""}`} />
                     </div>
                     <div class="grid divide divide-y-2 divide-neutral-200 place-items-center">
                         <FaCog className={`text-6xl my-2 text-neutral-200 rounded-lg hover:bg-neutral-500 p-3 ${Name === "SETTINGS" ? "bg-neutral-500" : ""}`} />
