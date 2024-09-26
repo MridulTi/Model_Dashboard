@@ -6,7 +6,6 @@ import validators
 from flask_jwt_extended import create_access_token,jwt_required,set_access_cookies,create_refresh_token,set_refresh_cookies,get_jwt_identity,unset_jwt_cookies
 from utils.ApiError import ApiError 
 from utils.ApiResponse import ApiResponse 
-from utils.RenderResponse import RenderResponse
 
 auth=Blueprint("auth",__name__,url_prefix="/api/v1/auth")
 
@@ -80,10 +79,7 @@ def login():
     user=User.query.filter_by(username=username).first()
 
     if user and user.password!=password:
-        try:
-            return RenderResponse('error.html',HTTP_400_BAD_REQUEST,{"error_message":str(e),"error_code":"invalide user"})
-        except:
-             return ApiError('an error occured',HTTP_400_BAD_REQUEST) 
+        return ApiError('an error occured',HTTP_400_BAD_REQUEST) 
     #if not user:
      #   return ApiError("Invalid User",HTTP_400_BAD_REQUEST)
     

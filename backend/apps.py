@@ -1,7 +1,7 @@
 from flask import Flask,request,make_response,redirect,url_for
 from config import app,db,socket
 from mridul import mridul
-from utils.RenderResponse import RenderResponse
+from utils.ApiResponse import ApiResponse
 from auth import auth
 from priyanka import priyanka
 from constants.https_status_codes import *
@@ -18,7 +18,7 @@ def register_login():
         registration = 0
     if request.args.get('register'):
         registration=1
-    return RenderResponse("register.html",HTTP_200_OK,context={'registration':registration})
+    return ApiResponse("App Working",HTTP_200_OK,registration)
 
 if __name__=="__main__":
     with app.app_context():
